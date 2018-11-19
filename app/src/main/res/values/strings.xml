@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="need_a_new_account">Need a new Account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="display_name">Display Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_out">Log Out</string>
+    <string name="all_users">All Users</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="change_image">Change Image</string>
+    <string name="change_status">Change Status</string>
+    <string name="hi_there_i_m_using_chatapp">Hi There! I\'m using ChatApp</string>
+</resources>
