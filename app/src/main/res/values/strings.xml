@@ -12,4 +12,5 @@
     <string name="change_status">Change Status</string>
     <string name="hi_there_i_m_using_chatapp">Hi There! I\'m using ChatApp</string>
     <string name="create_a_new_account">Create a New Account</string>
+    <string name="welcome_to_chatapp">Welcome to ChatApp</string>
 </resources>

@@ -106,13 +106,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             userMap.put("thumb_image", "default");
 
                             mDatabase.setValue(userMap);
-                            updateUI();
+                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI();
+                            updateUI(null);
                         }
 
                     }
@@ -120,29 +118,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // [END create_user_with_email]
     }
 
-    private void register_user(final String display_name, String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-
-                    FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-
-
-
-
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
-    }
-
-    private void updateUI(){
+    private void updateUI(FirebaseUser user){
+        if (user != null){
         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
+        } else {
+            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
