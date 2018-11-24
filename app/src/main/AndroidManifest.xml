@@ -29,7 +29,10 @@
         <activity
             android:name=".StatusActivity"
             android:parentActivityName=".SettingsActivity" />
-        <activity android:name=".UsersActivity"
+        <activity
+            android:name=".UsersActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SigninActivity"
             android:parentActivityName=".MainActivity"/>
     </application>
 

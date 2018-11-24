@@ -2,6 +2,7 @@ package moh.chatapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +28,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference mUserDatabase;
@@ -68,7 +74,10 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mName.setText(name);
                 mStatus.setText(status);
-                Picasso.get().load(image).into(mDisplayImage);
+
+                if(!image.equals("default")){
+                Picasso.get().load(image).placeholder(R.drawable.default_profile_picture).into(mDisplayImage);
+                }
             }
 
             @Override
@@ -113,6 +122,16 @@ public class SettingsActivity extends AppCompatActivity {
             Uri imageURI = data.getData();
             String current_userID = mCurrentUser.getUid();
             StorageReference filepath = mProfileStorage.child("profile_pictures").child(current_userID + ".jpg");
+            File thumb_filepath = new File(imageURI.getPath());
+            try {
+                Bitmap thumb_bitmap = new Compressor(this).setMaxHeight(200).setMaxWidth(200).setQuality(75).compressToBitmap(thumb_filepath);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] thumbyte = baos.toByteArray();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             filepath.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
                 @Override

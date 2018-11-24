@@ -49,6 +49,7 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull Users model) {
                 holder.setName(model.getName());
+                holder.setStatus(model.getStatus());
             }
 
             @NonNull
@@ -67,6 +68,7 @@ public class UsersActivity extends AppCompatActivity {
     public static class UsersViewHolder extends RecyclerView.ViewHolder{
 
         View mView;
+
         public UsersViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -74,6 +76,11 @@ public class UsersActivity extends AppCompatActivity {
         public void setName(String name){
             TextView mUsernameView = mView.findViewById(R.id.user_single_name);
             mUsernameView.setText(name);
+        }
+
+        public void setStatus(String status){
+            TextView mStatusView = mView.findViewById(R.id.user_single_status);
+            mStatusView.setText(status);
         }
 
     }
