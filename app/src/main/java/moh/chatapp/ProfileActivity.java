@@ -32,12 +32,16 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView mProfileStatus;
     private  TextView mProfileFriendsCount;
     private Button mProfileSendRequestButton;
+    private Button mProfileCancelFriendRequest;
     private DatabaseReference mUsersDatabase;
     private ProgressDialog mProgressDialog;
     private  DatabaseReference mFriendRequestDatabase;
     private DatabaseReference mFriendDatabase;
     private FirebaseUser mUser;
     private int current_state;
+    private int NOT_FRIENDS = 0;
+    private int REQUEST_SENT = 2;
+    private int FRIENDS = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class ProfileActivity extends AppCompatActivity {
         mProfileFriendsCount = findViewById(R.id.profile_total_friends);
         mDisplayName = findViewById(R.id.profile_display_name);
         mProfileSendRequestButton = findViewById(R.id.send_request_btn);
+        mProfileCancelFriendRequest = findViewById(R.id.profile_decline_btn);
+        mProfileCancelFriendRequest.setVisibility(View.INVISIBLE);
+        mProfileCancelFriendRequest.setEnabled(false);
         current_state = 0;
 
         mProgressDialog = new ProgressDialog(this);
@@ -83,10 +90,12 @@ public class ProfileActivity extends AppCompatActivity {
                             String request_type = dataSnapshot.child(userID).child("request_type").getValue().toString();
                             if (request_type.equals("received")){
 
-                                current_state = 3;
+                                current_state = FRIENDS;
                                 mProfileSendRequestButton.setText("Accept Friend Request");
+                                mProfileCancelFriendRequest.setVisibility(View.VISIBLE);
+                                mProfileCancelFriendRequest.setEnabled(true);
                             } else if (request_type.equals("sent")) {
-                                current_state = 2;
+                                current_state = REQUEST_SENT;
                                 mProfileSendRequestButton.setText("Cancel Friend Request");
                             }
                             mProgressDialog.dismiss();
@@ -95,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.hasChild(userID)){
-                                        current_state = 1;
+                                        current_state = NOT_FRIENDS;
                                         mProfileSendRequestButton.setText("Unfriend");
                                     }
                                 }
@@ -129,7 +138,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 mProfileSendRequestButton.setEnabled(false);
                 // NOT FRIENDS STATE
-                if (current_state == 0){
+                if (current_state == NOT_FRIENDS){
                     mFriendRequestDatabase.child(mUser.getUid()).child(userID).child("request_type").setValue("sent")
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -152,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity {
                     });
                 }
                 // FRIEND REQUEST SENT STATE
-                if (current_state == 2){
+                if (current_state == REQUEST_SENT){
                     mFriendRequestDatabase.child(mUser.getUid()).child(userID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -169,7 +178,7 @@ public class ProfileActivity extends AppCompatActivity {
                     });
                 }
                 // FRIENDS STATE
-                if (current_state == 3){
+                if (current_state == FRIENDS){
                     final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
                     mFriendDatabase.child(mUser.getUid()).child(userID).setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
