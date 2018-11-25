@@ -1,5 +1,7 @@
 package moh.chatapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersActivity extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -50,6 +55,17 @@ public class UsersActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull Users model) {
                 holder.setName(model.getName());
                 holder.setStatus(model.getStatus());
+                holder.setUserImage(model.getImage());
+
+                final String user_id = getRef(position).getKey();
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profile_intent = new Intent(UsersActivity.this,ProfileActivity.class);
+                        profile_intent.putExtra("user_id",user_id);
+                        startActivity(profile_intent);
+                    }
+                });
             }
 
             @NonNull
@@ -81,6 +97,11 @@ public class UsersActivity extends AppCompatActivity {
         public void setStatus(String status){
             TextView mStatusView = mView.findViewById(R.id.user_single_status);
             mStatusView.setText(status);
+        }
+
+        public void setUserImage(String image){
+            CircleImageView userImageView = mView.findViewById(R.id.user_single_image);
+            Picasso.get().load(image).placeholder(R.drawable.default_profile_picture).into(userImageView);
         }
 
     }
