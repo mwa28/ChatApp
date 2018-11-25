@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -34,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button mProfileSendRequestButton;
     private Button mProfileCancelFriendRequest;
     private DatabaseReference mUsersDatabase;
+    private DatabaseReference mNotifDatabase;
     private ProgressDialog mProgressDialog;
     private  DatabaseReference mFriendRequestDatabase;
     private DatabaseReference mFriendDatabase;
@@ -52,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         mFriendRequestDatabase = FirebaseDatabase.getInstance().getReference().child("Friends_Request");
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        mNotifDatabase = FirebaseDatabase.getInstance().getReference().child("notification");
         setContentView(R.layout.activity_profile);
         mProfileImage = findViewById(R.id.profile_image);
         mProfileStatus = findViewById(R.id.profile_status);
@@ -147,10 +149,18 @@ public class ProfileActivity extends AppCompatActivity {
                                 mFriendRequestDatabase.child(userID).child(mUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        mProfileSendRequestButton.setEnabled(true);
-                                        current_state = 2;
-                                        mProfileSendRequestButton.setText("Cancel Friend Request");
-                                        Toast.makeText(ProfileActivity.this,"Request Canceled", Toast.LENGTH_LONG).show();
+                                        HashMap<String, String> notifData = new HashMap<>();
+                                        notifData.put("from", mUser.getUid());
+                                        notifData.put("type", "request");
+                                        mNotifDatabase.child(userID).push().setValue(notifData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                mProfileSendRequestButton.setEnabled(true);
+                                                current_state = REQUEST_SENT;
+                                                mProfileSendRequestButton.setText("Cancel Friend Request");
+                                                Toast.makeText(ProfileActivity.this,"Request Canceled", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                                     }
                                 });
                             } else {
@@ -169,7 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     mProfileSendRequestButton.setEnabled(true);
-                                    current_state = 0;
+                                    current_state = NOT_FRIENDS;
                                     mProfileSendRequestButton.setText("Send Friend Request");
                                     Toast.makeText(ProfileActivity.this,"Request Sent", Toast.LENGTH_LONG).show();
                                 }

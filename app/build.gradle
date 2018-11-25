@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
     implementation 'com.firebaseui:firebase-ui-database:4.2.1'
     implementation 'com.firebaseui:firebase-ui-storage:4.2.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
