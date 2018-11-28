@@ -14,4 +14,7 @@
     <string name="create_a_new_account">Create a New Account</string>
     <string name="welcome_to_chatapp">Welcome to ChatApp</string>
     <string name="login_to_my_account">Login to my account</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

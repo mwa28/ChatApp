@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.w3c.dom.Text;
 
@@ -97,6 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uid = user.getUid();
+                            String deviceToken = FirebaseInstanceId.getInstance().getToken();
                             mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
                             HashMap<String, String> userMap = new HashMap<>();
@@ -104,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             userMap.put("status", "Hi there! I am using ChatApp.");
                             userMap.put("image", "default");
                             userMap.put("thumb_image", "default");
-
+                            userMap.put("device_token",deviceToken);
                             mDatabase.setValue(userMap);
                             updateUI(user);
                         } else {
