@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
-            mUserRef.child("online").setValue("true");
+            mUserRef.child("online").setValue(true);
 
         }
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(currentUser != null) {
 
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+            mUserRef.child("online").setValue(/*ServerValue.TIMESTAMP*/ false);
 
         }
 
