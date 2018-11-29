@@ -81,7 +81,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        // [START create_user_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -99,7 +98,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             });
 
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signinwithEmailandPassword:failure", task.getException());
                             Toast.makeText(SigninActivity.this, "Login failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -107,7 +105,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
 
                     }
                 });
-        // [END create_user_with_email]
     }
 
     @Override

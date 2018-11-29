@@ -135,17 +135,7 @@ public class SettingsActivity extends AppCompatActivity {
             Uri imageURI = data.getData();
             String current_userID = mCurrentUser.getUid();
             StorageReference filepath = mProfileStorage.child("profile_pictures").child(current_userID + ".jpg");
-            /*final StorageReference thumbpath = mProfileStorage.child("profile_pictures").child("thumbnails").child(current_userID + "_thumb.jpg");
-            File thumb_filepath = new File(imageURI.getPath());
-            try {
-                mDisplayImage.setDrawingCacheEnabled(true);
-                mDisplayImage.buildDrawingCache();
-                Bitmap thumb_bitmap = new Compressor(this).setMaxHeight(200).setMaxWidth(200).setQuality(75).compressToBitmap(thumb_filepath);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                final byte[] thumbyte = baos.toByteArray();*/
-
-                filepath.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            filepath.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
                     @Override
                     public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
@@ -154,18 +144,6 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     final String download_url = uri.toString();
-                                    /*UploadTask uploadTask = thumbpath.putBytes(thumbyte);
-                                    uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                            if (task.isSuccessful()){
-                                                mProfileStorage.child("profile_pictures").child("thumbnails").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                    @Override
-                                                    public void onSuccess(Uri uri) {
-                                                        String thumb_uri = uri.toString();
-                                                        mUserDatabase.child("thumb_image").setValue(thumb_uri).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {*/
                                                                 mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -196,9 +174,6 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     }
                 });
-            /*} catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }
     }
 }

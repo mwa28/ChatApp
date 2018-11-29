@@ -88,13 +88,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uid = user.getUid();
@@ -110,14 +108,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             mDatabase.setValue(userMap);
                             updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             updateUI(null);
                         }
 
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private void updateUI(FirebaseUser user){
